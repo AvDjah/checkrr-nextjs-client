@@ -1,29 +1,30 @@
 export type EventList = {
-    id: bigint
+    id: number
     name: string
     description: string
-    events: UserEvent
-    userId: bigint
-    priorityId: bigint
+    events: UserEvent[]
+    userId: number
+    priorityId: number
     subscriptions: any
 }
 
 export type UserEvent = {
-    id: bigint; // int64 maps to bigint in TypeScript
+    id: number; // int64 maps to number in TypeScript
     eventName: string;
     startTime: Date; // time.Time can be represented by Date
     waitTime: Date;
     status: string;
     eventType: number;
-    eventListId: bigint;
+    eventListId: number;
     value: number; // float64 can be represented by number
     description: string;
-    categoryID: bigint;
-    priorityID: bigint;
-    userID: bigint;
+    categoryID: number;
+    priorityID: number;
+    userID: number;
     notification: any; // Assuming Notification is defined elsewhere
 }
 
 export type UserNotification = {
 
 }
+

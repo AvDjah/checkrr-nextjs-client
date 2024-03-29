@@ -1,5 +1,5 @@
 export enum ButtonType {
-    "normal", "danger", "primary", "secondary", "success"
+    "normal", "danger", "primary", "secondary", "success", "purpo"
 }
 
 
@@ -12,11 +12,13 @@ function getButtonColors(btype: ButtonType) {
         return "bg-blue-100 hover:bg-blue-200 active:bg-blue-400"
     } else if (btype === ButtonType.success) {
         return "bg-green-100 hover:bg-green-200 active:bg-green-400"
+    } else if (btype === ButtonType.purpo) {
+        return "bg-purple-100 hover:bg-purple-200 active:bg-purple-400"
     }
 }
 
 
-export default function Button(props: { text: string, size?: number, type: ButtonType }) {
+export default function Button(props: { text: string, size?: number, type: ButtonType, onClick?: () => void }) {
 
 
     const buttonColor = getButtonColors(props.type)
@@ -24,10 +26,14 @@ export default function Button(props: { text: string, size?: number, type: Butto
 
     return (
         <>
-            <button
-                className={"transition-all text-center duration-75 ease-in p-2 rounded-xl ring-offset-2 ring-offset-slate-50 active:ring-2 ring-blue-300 "
-                    + buttonColor
-                }>
+            <button onClick={() => {
+                if (props.onClick !== undefined) {
+                    props.onClick()
+                }
+            }}
+                    className={"transition-all text-center duration-75 ease-in p-2 rounded-xl ring-offset-2 ring-offset-slate-50 active:ring-2 ring-blue-300 "
+                        + buttonColor
+                    }>
                 {props.text}
             </button>
         </>

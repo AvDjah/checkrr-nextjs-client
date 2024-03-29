@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {useState} from "react";
 import {Slide, toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+    import 'react-toastify/dist/ReactToastify.css';
 import {useRouter} from "next/navigation";
 
 export default function LoginPage() {
@@ -100,7 +100,7 @@ export default function LoginPage() {
                                     " active:ring-2 hover:ring-2 ring-offset-2 ring-offset-slate-50 ring-amber-500"}>Login
                         </button>
                         <button onClick={checkLogin}
-                                className={"bg-amber-100 hover:bg-amber-200 active:bg-amber-400 transition-all ease-in p-3 rounded-xl " +
+                                className={"ml-2 bg-amber-100 hover:bg-amber-200 active:bg-amber-400 transition-all ease-in p-3 rounded-xl " +
                                     " active:ring-2 hover:ring-2 ring-offset-2 ring-offset-slate-50 ring-amber-500"}>Check
                         </button>
                     </div>

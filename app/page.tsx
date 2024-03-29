@@ -3,8 +3,10 @@ import TitleBar from "@/components/Home/TitleBar";
 import EventsBox from "@/components/Home/EventsBox";
 import Bell from "@/components/Home/NotificationBell";
 import {redirect} from "next/navigation";
-import {EventList} from "@/components/types";
+import {EventList} from "@/app/types";
 import {cookies} from "next/headers";
+import SingleEventBox from "@/components/Home/SingleEventBox";
+import EventsView from "@/components/Home/EventsView";
 
 // import {useEffect} from "react";
 
@@ -48,8 +50,8 @@ export default async function Home() {
                     <input
                         className={"text-3xl rounded-xl border-1 border-black focus:border-2 p-4 font-header outline-none"}/>
                 </div>
-                <div className={"mt-4 w-128"}>
-                    <EventsBox events={events === undefined ? [] : events}  />
+                <div className={"mt-4"}>
+                    <EventsView />
                 </div>
             </div>
         </div>

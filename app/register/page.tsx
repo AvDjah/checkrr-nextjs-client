@@ -5,13 +5,16 @@ import Link from "next/link";
 import {useState} from "react";
 import {Slide, toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import {useRouter} from "next/navigation";
 
 export default function Register() {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [name, setName] = useState("")
+    const router = useRouter()
 
-    const registerClick = () => {
+    const registerClick = async () => {
         if (username.length === 0 || password.length === 0) {
             toast.error("Enter correct values", {
                 position: "top-right",
@@ -30,15 +33,17 @@ export default function Register() {
             method: "POST",
             body: JSON.stringify({
                 userId: username,
-                password
+                password,
+                name
             }),
             credentials: "include",
             mode: "cors"
-        }).then(res => {
-            if (res.status === 200) {
+        }).then(async res => {
+            if (res.status === 201) {
                 return res.json()
             } else {
-                toast.error("Enter correct values", {
+                const json = await res.json()
+                toast.error(json, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -49,10 +54,13 @@ export default function Register() {
                     theme: "dark",
                     transition: Slide,
                 })
+                throw new Error(json)
             }
         }).then(res => {
             console.log("console log:", res)
-
+            setUsername("")
+            setPassword("")
+            router.push("/login")
 
         }).catch(e => console.log("error: ", e))
     }
@@ -68,14 +76,22 @@ export default function Register() {
                         <div className={"md:mt-4 mt-2"}>
                             <label
                                 className={"p-1 text-gray-500 text-xs after:content-['*'] after:ml-0.5 after:text-red-500"}>Enter
+                                Name</label>
+                            <input value={name} onChange={e => setName(e.target.value)}
+                                   className={"rounded-xl block  outline-none bg-gray-100  text-xl p-4"}/>
+                        </div>
+                        <div className={"md:mt-4 mt-2"}>
+                            <label
+                                className={"p-1 text-gray-500 text-xs after:content-['*'] after:ml-0.5 after:text-red-500"}>Enter
                                 Username</label>
-                            <input className={"rounded-xl block  outline-none bg-gray-100  text-xl p-4"}/>
+                            <input value={username} onChange={e => setUsername(e.target.value)}
+                                   className={"rounded-xl block  outline-none bg-gray-100  text-xl p-4"}/>
                         </div>
                         <div className={"md:mt-4 mt-2"}>
                             <label
                                 className={" text-gray-500 text-xs after:content-['*'] after:ml-0.5 after:text-red-500"}>Enter
                                 Password</label>
-                            <input type={"password"}
+                            <input type={"password"} value={password} onChange={e => setPassword(e.target.value)}
                                    className={"rounded-xl block  outline-none bg-gray-100  text-xl p-4"}/>
                         </div>
                     </div>

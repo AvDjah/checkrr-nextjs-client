@@ -1,8 +1,13 @@
 "use client"
 import Button, {ButtonType} from "@/components/Home/Button";
-import {EventList} from "@/components/types";
-import {createContext, Dispatch, SetStateAction, useState} from "react";
-import AddEventListBox from "@/components/Home/AddEventsList";
+import {EventList} from "@/app/types";
+import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
+import AddEventListBox, {
+    GetPriorityColor,
+    GetPriorityEnum,
+    GetPriorityEnumFromId
+} from "@/components/Home/AddEventsList";
+import {EventsViewContext} from "@/components/Home/EventsView";
 
 export type EventBoxContextType = {
     current: CurrentView
@@ -19,16 +24,77 @@ const defaultEventBoxContext: EventBoxContextType = {
 }
 export const EventBoxContext = createContext(defaultEventBoxContext)
 
-export default function EventsBox(props: { events: EventList[] }) {
+
+const ListItem = ({priorityId, name, description, eventList}: {
+    priorityId: number,
+    name: string,
+    description: string,
+    eventList: EventList
+}) => {
+
+    const eventsViewContext = useContext(EventsViewContext)
+
+
+    return (<div className={"flex flex-col transition-all ease-in-out"}>
+            <div
+                className={"p-1 flex flex-row justify-between items-center transition-all ease-in hover:bg-blue-100 cursor-pointer rounded-2xl"}>
+                <div className={"flex justify-start gap-4 items-center"}>
+                    <div className={"h-8 w-4 rounded-xl"}
+                         style={{background: GetPriorityColor(GetPriorityEnumFromId(priorityId))}}
+                    ></div>
+                    {name}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                         stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+                    </svg>
+                </div>
+                <div onClick={() => {
+                    if (eventsViewContext.changeSelectedEvent !== null) {
+                        eventsViewContext.changeSelectedEvent(eventList)
+                    }
+                }}>
+                    <Button
+                        type={ButtonType.purpo}
+                        text={"View"}/>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default function EventsBox() {
 
     const arr = [1, 1, 2, 231, 213, 4, 343, 314, 1, 23]
-    const [eventBoxContext, setEventBoxContext] = useState(CurrentView.Default)
+    const evenContext = useContext(EventBoxContext)
+    const eventViewContext = useContext(EventsViewContext)
 
+
+    const [eventBoxContext, setEventBoxContext] = useState(CurrentView.Default)
+    const [events, setEvents] = useState<EventList[]>([])
 
     const addItemClick = () => {
         setEventBoxContext(CurrentView.Add)
     }
 
+    const getUserEventList = () => {
+        fetch("http://localhost:8080/eventList/GetAllEvents", {
+            method: "GET",
+            credentials: "include",
+            mode: "cors",
+        }).then(res => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                throw new Error("Could not get user events")
+            }
+        }).then(res => {
+            setEvents(res)
+        }).catch(e => console.log("err: ", e))
+    }
+
+    useEffect(() => {
+        getUserEventList()
+    }, [eventBoxContext])
 
     return (
         <EventBoxContext.Provider value={{current: eventBoxContext, updateView: setEventBoxContext}}>
@@ -44,13 +110,11 @@ export default function EventsBox(props: { events: EventList[] }) {
                                 <div><Button text={"Filter"} type={ButtonType.secondary}/></div>
                             </div>
                             <div className={"mt-2"}>
-                                {props.events.map((val, index) => {
+                                {events.map((val, index) => {
                                     return (
-                                        <div key={index} className={"p-1"}> Child : <Button type={ButtonType.normal}
-                                                                                            text={"View"}/>
-                                            <Button type={ButtonType.danger} text={"Delete"}/> <Button
-                                                text={"Something"}
-                                                type={ButtonType.success}/>
+                                        <div key={index}>
+                                            <ListItem eventList={val} priorityId={val.priorityId} name={val.name}
+                                                      description={val.description}/>
                                         </div>
                                     )
                                 })}
