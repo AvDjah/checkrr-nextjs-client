@@ -1,5 +1,5 @@
 "use client"
-import {Dispatch, SetStateAction, useContext, useState} from "react";
+import React, {Dispatch, SetStateAction, useContext, useState} from "react";
 import {EventsViewContext} from "@/components/Home/EventsView";
 import Button, {ButtonType} from "@/components/Home/Button";
 import {GetPriorityColor, GetPriorityEnum, Priority, PrirorityColors} from "@/components/Home/AddEventsList";
@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {useRouter} from "next/navigation";
 import {EventList} from "@/app/types";
 import dayjs from "dayjs";
-import {LocalizationProvider, MobileTimePicker, StaticTimePicker} from "@mui/x-date-pickers";
+import {DesktopTimePicker, LocalizationProvider, MobileTimePicker, StaticTimePicker} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {eventSchema} from "@/validation/validator";
 
@@ -169,7 +169,7 @@ function AddEventBox(props: { setToggle: Dispatch<SetStateAction<boolean>>, sele
                     className={"p-1 text-gray-500 text-xs after:content-['*'] after:ml-0.5 after:text-red-500"}>Enter
                     Start Time</label>
                 <div>
-                    <MobileTimePicker
+                    <DesktopTimePicker
                         value={startTime}
                         views={['hours', 'minutes', 'seconds']}
                         onChange={newValue => {
@@ -226,9 +226,12 @@ function AddEventBox(props: { setToggle: Dispatch<SetStateAction<boolean>>, sele
 }
 
 
-export default function SingleEventBox() {
+export default function SingleEventBox({toggle, setToggle}: {
+    toggle: boolean,
+    setToggle: Dispatch<SetStateAction<boolean>>
+}) {
 
-    const [toggle, setToggle] = useState(false)
+    // const [toggle, setToggle] = useState(false)
 
     const eventViewContext = useContext(EventsViewContext)
 
@@ -239,7 +242,6 @@ export default function SingleEventBox() {
              style={{display: eventViewContext.selectedEventList === null ? "none" : "block"}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-                <ToastContainer/>
                 <div onClick={() => {
                     if (eventViewContext.changeSelectedEvent !== null) {
                         eventViewContext.changeSelectedEvent(null)
@@ -259,10 +261,10 @@ export default function SingleEventBox() {
                     <Button onClick={() => setToggle(true)} type={ButtonType.success} text={"Add Event"}/>
                     <Button type={ButtonType.purpo} text={"Filter"}/>
                 </div>
-                <hr className={"h-2 mt-4"}  />
-                <div className={"mt-2"} >
+                <hr className={"h-2 mt-4"}/>
+                <div className={"mt-2"}>
                     {selectedList?.events.map((val, index) => {
-                        return <div key={index} className={"flex flex-row justify-start items-center"} >
+                        return <div key={index} className={"flex flex-row justify-start items-center"}>
                             <div>°</div>
                             {val.eventName}
                         </div>

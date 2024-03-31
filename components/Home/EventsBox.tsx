@@ -62,7 +62,7 @@ const ListItem = ({priorityId, name, description, eventList}: {
     )
 }
 
-export default function EventsBox() {
+export default function EventsBox({toggle}: { toggle?: boolean }) {
 
     const arr = [1, 1, 2, 231, 213, 4, 343, 314, 1, 23]
     const evenContext = useContext(EventBoxContext)
@@ -76,6 +76,7 @@ export default function EventsBox() {
         setEventBoxContext(CurrentView.Add)
     }
 
+
     const getUserEventList = () => {
         fetch("http://localhost:8080/eventList/GetAllEvents", {
             method: "GET",
@@ -87,14 +88,25 @@ export default function EventsBox() {
             } else {
                 throw new Error("Could not get user events")
             }
-        }).then(res => {
+        }).then((res: EventList[]) => {
+            console.log("Got User Event List", res)
             setEvents(res)
+
+            if (eventViewContext.selectedEventList !== null) {
+                const updatedEvent = res.find(val => val.id === eventViewContext.selectedEventList!.id);
+                if (eventViewContext.changeSelectedEvent !== null && updatedEvent !== undefined) {
+                    eventViewContext.changeSelectedEvent(updatedEvent)
+                }
+            }
+
+
         }).catch(e => console.log("err: ", e))
     }
 
     useEffect(() => {
         getUserEventList()
-    }, [eventBoxContext])
+        console.log("Triggered")
+    }, [eventBoxContext, toggle])
 
     return (
         <EventBoxContext.Provider value={{current: eventBoxContext, updateView: setEventBoxContext}}>
