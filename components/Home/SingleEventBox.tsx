@@ -263,12 +263,26 @@ export default function SingleEventBox({toggle, setToggle}: {
                 </div>
                 <hr className={"h-2 mt-4"}/>
                 <div className={"mt-2"}>
-                    {selectedList?.events.map((val, index) => {
-                        return <div key={index} className={"flex flex-row justify-start items-center"}>
-                            <div>°</div>
-                            {val.eventName}
-                        </div>
-                    })}
+                    <div>
+                        <table className={"w-72"} >
+                            <thead className={""} >
+                            <tr className={"p-2"} >
+                                <th className={"p-2"} >Name</th>
+                                <th  className={"p-2"} >Time</th>
+                                <th  className={"p-2"} >Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {selectedList?.events.map((val, index) => {
+                                return <tr key={index} className={" " + (index%2 === 1 ? "bg-blue-100" : " ")}>
+                                    <td className={"p-2"}  >{val.eventName}</td>
+                                    <td className={"p-2"} >{val.startTime}</td>
+                                    <td className={"p-2"} ><button>View</button></td>
+                                </tr>
+                            })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 {toggle && eventViewContext.selectedEventList !== null &&
                     <div

@@ -11,8 +11,8 @@ export type EventList = {
 export type UserEvent = {
     id: number; // int64 maps to number in TypeScript
     eventName: string;
-    startTime: Date; // time.Time can be represented by Date
-    waitTime: Date;
+    startTime: string; // time.Time can be represented by Date
+    waitTime: string;
     status: string;
     eventType: number;
     eventListId: number;

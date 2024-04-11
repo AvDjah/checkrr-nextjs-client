@@ -6,6 +6,7 @@ import {createContext, Dispatch, SetStateAction, useEffect, useState} from "reac
 import {EventList} from "@/app/types";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import OngoingEvents from "@/components/Home/OngoingEvents";
 
 
 type tEventsViewContext = {
@@ -34,6 +35,7 @@ export default function EventsView() {
             }}>
                 <EventsBox toggle={toggle}/>
                 <SingleEventBox toggle={toggle} setToggle={setToggle}/>
+                <OngoingEvents />
                 {/*<button onClick={() => {*/}
                 {/*    console.log(socket)*/}
                 {/*    if(socket !== undefined){*/}

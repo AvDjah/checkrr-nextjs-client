@@ -50,7 +50,7 @@ export default function NotificationBox() {
         <div className={"p-2"} >
             Notification Box
         </div>
-        <div className={"mt-2 p-2"}>
+        <div className={"mt-2 p-2 h-96 overflow-y-scroll"}>
             {notifications.map((res, index) => {
                 return <div key={index} className={"mt-4 hover:bg-amber-300 flex flex-row justify-start items-center gap-4 p-2 ring-2 rounded-md bg-amber-100 ring-offset-2"}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
